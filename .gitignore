@@ -1,0 +1,58 @@
+# ---------------------------------------------------------------------------
+# What this repository shares: code, prompts, the JSON schema, the editable Dublin Core mapping,
+# aggregate result tables, and chart images. What it does NOT share: the collection's data.
+# Nothing under "data and catalog text" should be added until Special Collections confirms what can be public.
+# (Comments must be on their own lines in a .gitignore.)
+# ---------------------------------------------------------------------------
+
+# ---- secrets (never commit a key) ----
+.env
+.env.*
+*.key
+*secret*
+*credentials*
+
+# ---- data and catalog text (hold until Special Collections confirms) ----
+# catalog export: titles, notes, subjects
+Prosch_Export.txt
+# sample list with record titles
+manifest.csv
+# the photographs
+images/
+# AI output for each record, plus validation and score files
+outputs/
+# invalid model replies (they describe the images)
+failed_runs/
+# an older working copy
+prosch_v2/
+# vocabulary lists built from catalog subject headings, and cached id.loc.gov lookups for them
+vocab_*.txt
+vocab_classification.csv
+id_cache.json
+authority_cache.json
+# shows images and catalog records side by side
+review.html
+
+# ---- derived files that contain AI text or catalog terms ----
+review_*.xlsx
+demo_review.xlsx
+demo_dc_export*.csv
+dc_export_*.csv
+normalized_dates_*.csv
+calibration_*.csv
+confidence_v2_*.csv
+unmatched_review*.csv
+rubric_summary.csv
+rubric_errors.csv
+rubric_summary.md
+logs_*.txt
+
+# ---- working notes and findings that quote catalog headings (decide before publishing) ----
+docs/
+CLAUDE.md
+CHECKLIST.md
+
+# ---- Python and macOS clutter ----
+__pycache__/
+*.pyc
+.DS_Store

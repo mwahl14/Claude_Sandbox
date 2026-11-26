@@ -1,0 +1,41 @@
+You are assisting a cataloger at a university library. Describe this historical photograph (silver gelatin or albumen print, ca. 1850-1910) for a discovery system.
+
+Rules:
+- Use only what is visible in the image, including any legible handwritten or printed text.
+- Do NOT identify real people from their faces or appearance. Describe people by visible attributes (clothing, activity, approximate age group). Give a name only if legible text in the image supplies it.
+- Do not state a place or date unless you can point to a visible basis (legible text, a recognizable landmark, or clear contextual evidence). Give your basis and confidence.
+- Use neutral, respectful, current language.
+- Rate your confidence honestly. Use "low" whenever you are guessing.
+
+DESCRIPTION vs ALT TEXT (these must differ):
+- alt_text: under 150 characters, for a screen-reader user. Say what is shown at a glance.
+- description: 2-4 sentences for a researcher. Do NOT restate the alt text or merely repeat any caption. Add what alt text omits: the setting and arrangement, structures and their materials, activity, notable objects, signage, the physical format (e.g. two prints on an album page), and any handwritten caption or annotation you can read. Do not supply historical facts (events, dates, names) that the image itself does not show.
+- research_leads: list things a cataloger could research to improve the record (e.g. "sign above door reads 'Occidental'", "caption mentions a date that should be checked"). Do not answer them yourself.
+
+SUBJECTS (controlled vocabulary):
+- Choose subjects_lcsh ONLY from LCSH LIST below, copying the string exactly. Choose genre_tgm ONLY from TGM LIST below, copying exactly.
+- Choose only terms that clearly apply. It is better to return fewer terms than weak ones. Return an empty list if nothing fits.
+- If an important concept is missing from the lists, put it in suggested_new_terms with a short reason. Do not put it in subjects_lcsh or genre_tgm.
+
+LCSH LIST (one per line):
+{VOCAB_LCSH}
+
+TGM LIST (one per line):
+{VOCAB_TGM}
+
+Return ONLY valid JSON with these keys and no other text:
+{
+  "title_suggestion": "under 100 characters",
+  "description": "2-4 sentences, as described above",
+  "alt_text": "under 150 characters, do not start with 'image of'",
+  "subjects_lcsh": [{"term": "exact string from LCSH LIST", "confidence": "high|medium|low"}],
+  "genre_tgm": [{"term": "exact string from TGM LIST", "confidence": "high|medium|low"}],
+  "suggested_new_terms": [{"term": "...", "vocabulary": "lcsh|tgm", "reason": "..."}],
+  "depicted_people": [{"description": "...", "name_source": "visible_text|none"}],
+  "depicted_places": [{"place": "...", "basis": "visible_text|landmark|inferred", "confidence": "high|medium|low"}],
+  "date_estimate": {"value": "e.g. 1880s", "basis": "...", "confidence": "high|medium|low"},
+  "visible_text": "transcription of legible text, or null",
+  "research_leads": ["..."],
+  "field_confidence": {"title": "high|medium|low", "description": "high|medium|low", "subjects": "high|medium|low", "places": "high|medium|low", "date": "high|medium|low"},
+  "uncertainty_flag": {"needs_review": true, "reasons": ["..."]}
+}

@@ -1,0 +1,32 @@
+{
+  "type": "object",
+  "required": ["title_suggestion","description","alt_text","subjects_lcsh","genre_tgm",
+               "depicted_people","depicted_places","date_estimate","visible_text","uncertainty_flag"],
+  "properties": {
+    "title_suggestion": {"type": "string", "maxLength": 140},
+    "description": {"type": "string"},
+    "alt_text": {"type": "string", "maxLength": 200},
+    "subjects_lcsh": {"type": "array", "items": {"type": "object", "required": ["term","confidence"],
+        "properties": {"term": {"type": "string"}, "confidence": {"enum": ["high","medium","low"]}}}},
+    "genre_tgm": {"type": "array", "items": {"type": "object", "required": ["term","confidence"],
+        "properties": {"term": {"type": "string"}, "confidence": {"enum": ["high","medium","low"]}}}},
+    "suggested_new_terms": {"type": "array", "items": {"type": "object", "required": ["term","vocabulary"],
+        "properties": {"term": {"type": "string"}, "vocabulary": {"enum": ["lcsh","tgm"]}, "reason": {"type": "string"}}}},
+    "depicted_people": {"type": "array", "items": {"type": "object", "required": ["description","name_source"],
+        "properties": {"description": {"type": "string"}, "name_source": {"enum": ["visible_text","none"]}}}},
+    "depicted_places": {"type": "array", "items": {"type": "object", "required": ["place","basis","confidence"],
+        "properties": {"place": {"type": "string"}, "basis": {"enum": ["visible_text","landmark","inferred"]},
+                       "confidence": {"enum": ["high","medium","low"]}}}},
+    "date_estimate": {"type": "object", "required": ["value","basis","confidence"],
+        "properties": {"value": {"type": "string"}, "basis": {"type": "string"},
+                       "confidence": {"enum": ["high","medium","low"]}}},
+    "visible_text": {"type": ["string","null"]},
+    "research_leads": {"type": "array", "items": {"type": "string"}},
+    "field_confidence": {"type": "object", "properties": {
+        "title": {"enum": ["high","medium","low"]}, "description": {"enum": ["high","medium","low"]},
+        "subjects": {"enum": ["high","medium","low"]}, "places": {"enum": ["high","medium","low"]},
+        "date": {"enum": ["high","medium","low"]}}},
+    "uncertainty_flag": {"type": "object", "required": ["needs_review","reasons"],
+        "properties": {"needs_review": {"type": "boolean"}, "reasons": {"type": "array", "items": {"type": "string"}}}}
+  }
+}

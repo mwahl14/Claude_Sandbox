@@ -1,0 +1,10 @@
+source_field,dublin_core_element,ai_source,status,notes
+title,dc:title,title_suggestion,draft,Draft dictionary: Title -> dc:title.
+description,dc:description,description,draft,Draft dictionary: Notes and Historical notes -> dc:description.
+alt_text,local:alt-text,alt_text,needs decision,No element for alt text in the draft dictionary. Kept as its own column until you choose one.
+subject_lcsh,dc:subject,subjects_lcsh,draft,Draft dictionary: Subjects (LCSH) -> dc:subject.
+subject_tgm,dc:subject.tgm,genre_tgm,needs decision,The draft textual dictionary removes the Subjects (TGM) field. Change this element to dc:subject to merge into subjects or delete this row to drop TGM terms. Needs the PHOTO dictionary.
+place,dc:coverage-spatial,depicted_places,draft,Draft dictionary: Geographic coverage -> dc:coverage-spatial.
+date_display,dc:date,date_estimate (normalized),draft,Draft dictionary: Date of publication -> dc:date.
+date_search,dc:date.search,date_estimate (normalized),needs decision,The draft also sends the hidden Dates field to dc:date; kept as its own column so the display date stays readable.
+date_edtf,dc:created,date_estimate (normalized),draft,Draft dictionary: Date-EDTF -> dc:created.

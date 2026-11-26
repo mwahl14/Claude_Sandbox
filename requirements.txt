@@ -1,0 +1,5 @@
+anthropic>=2.8
+jsonschema>=4.26
+pillow>=13.0
+openpyxl>=3.1
+matplotlib>=3.11
