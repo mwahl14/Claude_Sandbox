@@ -40,9 +40,10 @@ Only the **image** and the prompt's **vocabulary lists** are sent to the model. 
 | `make_review_sheet.py`, `export_dc.py`, `dc_mapping.csv` | Build the Excel review sheet; export accepted and edited values to Dublin Core with provenance columns. The mapping is an editable table. |
 | `rubric_summary.py` | Summarizes hand ratings (1-3 scores, error categories, reviewer minutes). |
 | `compare_models.py` | Compares two runs (for example two models) on the same gold records. |
-| `compare.py`, `match_authorities.py` | An HTML side-by-side viewer, and a (not yet run on real data) reconciler for places against LCNAF, LCSH, Wikidata and GeoNames. |
+| `match_authorities.py` | Looks up the places the AI found as exact headings at id.loc.gov (names and subjects) and as Wikidata items limited to Washington state. Suggestions only; rejected lookalikes are shown so wrong matches stay visible. No AI call. |
+| `compare.py` | An HTML side-by-side viewer of the image, the AI output and the catalog record. |
 | `demo.py`, `make_figures.py` | A one-command demo of one photo from image to Dublin Core, and the result charts. |
-| `test_*.py` | Automated tests for date normalization, the review sheet and export, and the rating summary. |
+| `test_*.py` | Automated tests for date normalization, the review sheet and export, the rating summary, and the place-text handling used in authority matching. |
 
 ## Setup
 
@@ -58,7 +59,7 @@ Calls to the model need an API key in the `ANTHROPIC_API_KEY` environment variab
 read -s "ANTHROPIC_API_KEY?Paste key: "; export ANTHROPIC_API_KEY
 ```
 
-Looking up headings at id.loc.gov needs internet access. On some macOS Python installs you also need `SSL_CERT_FILE=/etc/ssl/cert.pem` in front of those commands (or run the "Install Certificates" command that came with your Python).
+Looking up headings at id.loc.gov (and places at Wikidata) needs internet access; the scripts pace their requests and stop with a clear error, rather than caching a failure, if a lookup fails. On some macOS Python installs you also need `SSL_CERT_FILE=/etc/ssl/cert.pem` in front of those commands (or run the "Install Certificates" command that came with your Python).
 
 ## Running it on your own collection
 
@@ -69,6 +70,7 @@ python3 build_vocab.py                                   # vocabulary lists from
 python3 describe.py --n 30 --prompt v3 --only dev-gold   # costs API calls: state the number of calls before you run
 python3 validate_vocab.py --prompt v3
 python3 score.py --prompt v3
+python3 match_authorities.py --prompt v3 --gold-only     # place suggestions from id.loc.gov and Wikidata (no API key needed)
 python3 make_review_sheet.py --prompt v3                 # then review in Excel
 python3 export_dc.py review_v3.xlsx
 python3 -m unittest test_normalize_dates test_review_export test_rubric_summary
@@ -91,6 +93,7 @@ Partial-credit agreement with the catalogers' subject headings. The holdout has 
 - **A record-level confidence score did not predict correctness; a term-level flag did.** Terms the model rated "low" confidence, or whose heading is not authorized, matched the catalogers about half as often (for v3, 21% against 42%). The model's own "needs review" flag was true on every record.
 - **A second model (claude-haiku-5-5) on the same prompt** matched on precision, found fewer subjects (lower recall), wrote about twice the output tokens, and two first-attempt replies were cut off at the output limit.
 - **Date normalization** is rule-based and testable: 26 of 27 normalized dates were compatible with the gold date; narrative values are flagged for a cataloger.
+- **Place matching to authorities** needed care. Taking the top search result returned lookalikes (Chelan, France; First Avenue in Manhattan; a planning council for "Seattle"). Looking places up as exact LC headings, with Washington-filtered Wikidata results, raised exact LC headings from 27 to 40 of 49 places and cut "no result" from 20 to 4 (5 more matched only the containing city). An exact heading proves the heading exists, not that it is the right place for the photograph, so these remain suggestions for a cataloger.
 
 ## Limitations
 
@@ -101,7 +104,7 @@ Partial-credit agreement with the catalogers' subject headings. The holdout has 
 - **A prompt example:** the prompts since v2 include an illustrative example about a sign reading "Occidental", a name that appears in several catalog records. It only shows the format of a research lead and is unlikely to matter, but it is item-adjacent text in the prompt.
 - **The vocabulary lists come from the same catalog** as the gold set (gold records excluded), so the model chooses from headings this catalog already uses.
 - **The Dublin Core mapping is draft.** It follows a draft data dictionary, with open decisions (alt text, TGM, the hidden search-years field).
-- **Authority matching of places** (`match_authorities.py`) is written but not run on real data.
+- **Authority matching is a suggestion list.** An exact LC heading means the heading exists; descriptive place text, hedged places and local names (for example a monument or a neighborhood nickname) often match only a broader place or nothing, and Wikidata still returns related items that are not the place itself.
 
 ## Responsible use
 
